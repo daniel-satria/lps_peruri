@@ -1,10 +1,8 @@
-# Bank Clustering Analysis
-Group Pengelolaan Data dan Statistik (GPDS)
+# Paques Easy ML
 <br />
 <br />
-Lembaga Penjamin Simpanan (LPS)
+Made for Peruri and LPS POC
 <br />
 <br />
 # Authors
-Haekal Rizky Yulianto  
-Kurniandha Sukma Yunastrian
+Daniel Satria
