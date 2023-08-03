@@ -15,6 +15,9 @@ from numpy import NaN
 import pandas as pd
 from streamlit_pandas_profiling import st_profile_report
 import pandas_profiling
+import util as utl
+import base64
+import requests
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
@@ -28,27 +31,39 @@ st.set_page_config(page_title="Simple AI",
                    page_icon="assets/paques-favicon.ico", layout="wide",
                    )
 
+# Loading CSS
+utl.local_css("assets/custom.css")
+
 # Logo in side bar configuration
 st.sidebar.image("assets/paques-navbar-logo.png",
-                 output_format='PNG', width=150)
+                 output_format='PNG')
 
 # Sidebar Menu
 with st.sidebar:
-    menu_selected = option_menu("Menu", ["Home", "Data Exploration", "Data Engineering", "Modelling"],
+    menu_selected = option_menu("", ["Home", "Data Exploration", "Data Engineering", "Modelling"],
                                 icons=["house", "card-list", "award", "gear"],
                                 menu_icon="cast",
                                 default_index=0,
                                 styles={
-                                "nav-link": {"font-size": "15px", "text-align": "left",
-                                             "margin": "0px", "--hover-color": "#444444"}
+                                    "container": {"padding": "0!important", "background-color": "#272e2f"},
+                                    # "icon": {"color": "orange", "font-size": "25px"}, 
+                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444"},
+                                    "nav-link-selected": {"color": "#5CC5CD", "background-color": "rgba(128, 128, 128, 0.1)"}
                                 })
 
 # Configuring home menu
 if menu_selected == "Home":
-    st.write("Welcome")
+    # st.write("Welcome")
+    st.image("assets/trueai-header.png",
+                 output_format='PNG')
 
 # Configuring data exploration menu
 if menu_selected == "Data Exploration":
+
+    st.markdown("<h2 class='menu-title'>Data Exploration</h2>",
+                unsafe_allow_html=True)
+    st.markdown("<hr class='menu-divider' />",
+                unsafe_allow_html=True)
 
     # Setting the upload variabel
     uploaded_file = st.file_uploader("Choose a file to upload for training data",
@@ -87,6 +102,11 @@ if menu_selected == "Data Exploration":
 
 # Configuring Data Engineering Menu
 if menu_selected == "Data Engineering":
+
+    st.markdown("<h2 class='menu-title'>Data Engineering</h2>",
+                unsafe_allow_html=True)
+    st.markdown("<hr class='menu-divider' />",
+                unsafe_allow_html=True)
 
     # Upload data variable
     uploaded_file = st.file_uploader("Choose a file to upload for training data",
@@ -140,13 +160,18 @@ if menu_selected == "Data Engineering":
             )
 
     else:
-        st.write("Please upload any data to edit.")
+        st.markdown("<span class='info-box'>Please upload any data to edit.</span>",
+                unsafe_allow_html=True)
 
 
 # Configuring Modelling Menu
 if menu_selected == "Modelling":
 
-    st.markdown("<h2 style='text-align: center; color: red;'>Machine Learning Modelling Menu</h1>",
+    st.markdown("<h2 class='menu-title'>Modelling</h2>",
+                unsafe_allow_html=True)
+    st.markdown("<h6 class='menu-subtitle'>Machine Learning Menu</h6>",
+                unsafe_allow_html=True)
+    st.markdown("<hr class='menu-divider' />",
                 unsafe_allow_html=True)
 
     task_selected = option_menu("", ["Classification", "Regression", "Clustering"],
@@ -155,15 +180,14 @@ if menu_selected == "Modelling":
                                 orientation="horizontal",
                                 default_index=0,
                                 styles={
-        "nav-link": {"font-size": "15px", "text-align": "center",
-                     "margin": "0px", "--hover-color": "#444444"}
-    })
+                                    "container": {"background-color": "#272e2f"},
+                                    # "icon": {"color": "orange", "font-size": "25px"}, 
+                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444", "text-align-last": "center"},
+                                    "nav-link-selected": {"color": "#5CC5CD", "background-color": "rgba(128, 128, 128, 0.1)"}
+                                })
 
     # Configuring Classification Task
     if task_selected == "Classification":
-
-        st.markdown("<br>", unsafe_allow_html=True)
-
         # Setting the upload variabel
         uploaded_file = st.file_uploader("Choose a file to upload for training data",
                                          type="csv",
@@ -191,17 +215,15 @@ if menu_selected == "Modelling":
 
         # Markdown to gice space
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; color: cyan;'>Model Setting</h3>",
+        st.markdown("<h3 class='menu-secondary'>Model Setting</h3>",
                     unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
 
         # Selecting Model for Classification
         model_selection = st.selectbox(
             "Select Machine Learning Model for Classification Task",
             ("Logistic Regression", "Random Forest")
         )
-
+        
         st.write("Model selected:", model_selection)
 
         # Setting Logistic Regression Model

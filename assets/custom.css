@@ -1,0 +1,137 @@
+/* config.toml */
+/* [theme]
+primaryColor="#5CC5CD"
+backgroundColor="#181A1B"
+secondaryBackgroundColor="#272e2f"
+textColor="#F7F7F7"
+font="sans serif" */
+
+
+/* Header */
+.streamlit-wide header {
+    background: #383F43;
+}
+.streamlit-wide header > div:nth-child(1) {
+    background: #5CC5CD;
+}
+
+/* Sidebar */
+.appview-container > section:nth-child(1) {
+    background-color: #272e2f;
+}
+.appview-container > section:nth-child(1) > div > div:nth-child(2) {
+    padding: 1rem 1rem 1.5rem;
+}
+.appview-container > section:nth-child(1) > div > div:nth-child(2)
+[data-testid="stVerticalBlock"] [data-testid="stImage"] > img {
+    width: 120px;
+} 
+
+
+
+/* Content */
+.appview-container > section:nth-child(2) {
+    background-color: #181A1B;
+}
+.appview-container > section:nth-child(2) .block-container {
+    padding: 4rem;
+}
+.menu-title {
+    padding-top: 0;
+    color: #5CC5CD;
+}
+.menu-subtitle {
+    color: #CCCCCC;
+}
+.menu-divider {
+    margin-top: 0;
+}
+.menu-secondary {
+    color: #5CC5CD;
+    text-decoration: underline;
+}
+.info-box {
+    color: #CCCCCC;
+    font-size: 14px;
+    background: rgb(92 197 205 / 10%);
+    padding: 0.5rem;
+    border-left: 4px solid #5CC5CD;
+    border-radius: 4px;
+}
+
+/* Footer */
+footer {
+    display: none;
+}
+
+
+/* Component */
+/* Button */
+button[kind="secondary"] {
+    background-color: #1f2223;
+}
+button[kind="secondary"]:hover,
+button[kind="secondary"]:active,
+button[kind="secondary"]:focus:not(:active) {
+    border-color: #5CC5CD;
+    color: #5CC5CD;
+}
+button[kind="secondary"]:focus:active {
+    color: #1f2223;
+    background-color: #5CC5CD;
+}
+/* Input Number */
+.stNumberInput .focused {
+    border-color: #5CC5CD !important;
+}
+button.step-up:hover:enabled, button.step-down:hover:enabled,
+button.step-up:focus:enabled, button.step-down:focus:enabled {
+    color: #FFFFFF;
+    background-color: #5CC5CD;
+}
+/* Radio Button */
+[data-baseweb="radio"] > div:nth-child(1)  {
+    display: none;
+}
+[data-baseweb="radio"] > [tabindex="-1"] + div,
+[data-baseweb="radio"] > [tabindex="0"] + div {
+    display: flex;
+    align-items: center;
+}
+[data-baseweb="radio"] > [tabindex="-1"] + div::before  {
+    content: "";
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
+    background-color: #1f2223;
+    border: 1px solid #CCCCCC;
+    border-radius: 100%;
+    margin-right: 5px;
+}
+[data-baseweb="radio"] > [tabindex="0"] + div::before  {
+    content: "";
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
+    background-color: #5CC5CD;
+    border: 1px solid #5CC5CD;
+    border-radius: 100%;
+    margin-right: 5px;
+}
+
+/* Upload */
+section[data-testid="stFileUploadDropzone"] {
+    background-color: #272e2f;
+}
+/* Select */
+[data-baseweb="select"] > div {
+    border-color: #272e2f;
+    background-color: #272e2f;
+}
+[role="option"][aria-selected="true"] {
+    background-color: #272e2f;
+}
+/* Tooltip */
+[role="tooltip"] > div {
+    background-color: #272e2f;
+}
