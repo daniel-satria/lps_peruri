@@ -17,12 +17,15 @@ from streamlit_pandas_profiling import st_profile_report
 import pandas_profiling
 
 from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import MinMaxScaler
 
 from sklearn.metrics import classification_report
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import mean_absolute_error, r2_score
+from sklearn.metrics import mean_squared_error
 
 from sklearn.model_selection import train_test_split
 
@@ -477,7 +480,9 @@ if menu_selected == "Modelling":
 
             # Random Forest Classifier Object
             rfc_obj = RandomForestClassifier(
-                criterion=rfc_criterion, max_depth=rfc_max_depth, solver=log_res_solver)
+                criterion=rfc_criterion,
+                max_depth=rfc_max_depth,
+                solver=log_res_solver)
 
             # Fitting Data to Random Forest Classifier Model
             if st.button("Fit Data to Random Forest Model"):
@@ -492,6 +497,76 @@ if menu_selected == "Modelling":
         )
 
         st.write("Model selected:", model_selection)
+
+        # Setting Linear Regression fitting intercept
+        lin_reg_fit_intercept = st.radio(
+            "Calculating the intercept for the model",
+            (True, False)
+        )
+
+        # Setting Linear Regression positive coefficients
+        lin_reg_positive = st.radio(
+            "Forcing the coefficients to be positive",
+            (False, True)
+        )
+
+        # Linear Regression Object
+        lin_reg_obj = LinearRegression(
+            fit_intercept=lin_reg_fit_intercept,
+            positive=lin_reg_positive
+        )
+
+        # Fitting Data to Logistic Regression Model
+        if st.button("Fit Data to Linear Regression Model"):
+
+            # Initiating variable to fir data
+            X_train = st.session_state.scaled_data_train
+            X_test = st.session_state.scaled_data_test
+            y_train = st.session_state.y_train
+            y_test = st.session_state.y_test
+
+            # Fitting model to data
+            lin_reg_obj.fit(X_train, y_train)
+
+            st.write("Training Success")
+
+            # Predicting train data
+            y_train_predict = lin_reg_obj.predict(X_train)
+            y_train_predict_df = pd.DataFrame(y_train_predict)
+
+            # Predicting test data
+            y_test_predict = lin_reg_obj.predict(X_test)
+            y_test_predict_df = pd.DataFrame(y_train_predict)
+
+            # Calculating mean absolute error
+            mae_train = mean_absolute_error(
+                y_train, y_train_predict)
+            mae_test = mean_absolute_error(
+                y_test, y_test_predict)
+
+            # Calculating mean squarred error
+            mse_train = mean_squared_error(
+                y_train, y_train_predict)
+            mse_test = mean_squared_error(
+                y_test, y_test_predict)
+
+            # Showing mean absolute score
+            with st.expander("Show Mean Absolute Score"):
+                st.write("Train Score")
+                st.write(mae_train)
+                st.write("Test Score")
+                st.write(mae_test)
+
+            # Showing score
+            with st.expander("Show Squarred Score"):
+                st.write("Train Score")
+                st.write(mse_train)
+                st.write("Test Score")
+                st.write(mse_test)
+
+                # Giving space
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown("<br>", unsafe_allow_html=True)
 
     # Configuring Clustering Task
     if task_selected == "Clustering":
