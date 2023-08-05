@@ -3,69 +3,95 @@ import streamlit as st
 from util import get_data
 from sklearn.preprocessing import MinMaxScaler
 
-# Page configuration
-st.set_page_config(page_title="Simple AI",
-                   page_icon="assets/paques-favicon.ico", layout="wide",
-                   )
 
+# Bringing back the data from uploaded_file session_state
+if "uploaded_file" in st.session_state:
 
-uploaded_file = st.file_uploader("Choose a file to upload for training data",
-                                 type="csv",
-                                 help="The file will be used for training",
-                                 )
-# Confiuring uploaded data
-if uploaded_file is not None:
+    # Assigning uploaded_file in session state to a variable
+    dataframe = st.session_state.uploaded_file
 
-    # Uploading Dataframe
-    dataframe = get_data(uploaded_file)
-
-    # Initiating data on session state
-    if "data" not in st.session_state:
-        st.session_state.data = dataframe
-
+    # Showing data
+    st.markdown("<h2 style='text-align: center; color: red;'>Original Data</h1>",
+                unsafe_allow_html=True)
+    st.write(dataframe)
 
 else:
-    st.write("Please upload any data to edit.")
 
+    # Upload data variable if there is no data uploaded_file in session state
+    uploaded_file = st.file_uploader("Choose a file to upload for training data",
+                                     type="csv",
+                                     help="The file will be used for training",
+                                     )
 
-pilihan_kolom = list(st.session_state.data.columns)
+    # Confiuring uploaded data
+    if uploaded_file is not None:
 
-col1, col2 = st.columns(2)
+        # Uploading Dataframe
+        dataframe = get_data(uploaded_file)
 
+        st.write(dataframe)
 
-with col1:
-    feature_column = st.multiselect("Select any column",
-                                    st.session_state.data.columns,
-                                    default=list(
-                                        st.session_state.data.columns),
-                                    placeholder="Select columns")
+        st.session_state.uploaded_file = dataframe
 
-with col2:
-    target_column = st.selectbox("Select column to be the target",
-                                 st.session_state.data.columns)
+if "uploaded_file" not in st.session_state:
+    st.write("Please upload any data")
 
+else:
 
-col3, col4 = st.columns([3, 1])
+    if st.checkbox('Edit Data'):
 
-with col3:
-    st.write("List of Feature Data")
-    st.write(st.session_state.data[feature_column])
+        # Adding one space
+        st.markdown("<br>", unsafe_allow_html=True)
 
-with col4:
-    st.write("Target Data")
-    st.write(st.session_state.data[target_column])
+        # Initiating data on session state
+        if "data" not in st.session_state:
+            st.session_state.data = dataframe
 
+        # Callback function to delete records in data
+        def callback():
+            edited_rows = st.session_state["data_editor"]["edited_rows"]
+            rows_to_delete = []
 
-if 'feature_data' not in st.session_state:
-    st.session_state['feature_data'] = st.session_state.data[feature_column]
+            for idx, value in edited_rows.items():
+                if value["x"] is True:
+                    rows_to_delete.append(idx)
 
-if 'target_data' not in st.session_state:
-    st.session_state['target_data'] = st.session_state.data[target_column]
+            st.session_state["data"] = (
+                st.session_state["data"].drop(
+                    rows_to_delete, axis=0).reset_index(drop=True)
+            )
 
-if st.button("Scale Data"):
-    scaler = MinMaxScaler()
+        # Configuring column to delete
+        columns = st.session_state["data"].columns
+        column_config = {column: st.column_config.Column(
+            disabled=True) for column in columns}
+        modified_df = st.session_state["data"].copy()
+        modified_df["x"] = False
 
-    scaled_data = scaler.fit_transform(st.session_state.feature_data,
-                                       st.session_state.target_data)
+        # Moving delete column to be the first
+        modified_df = modified_df[["x"] +
+                                  modified_df.columns[:-1].tolist()]
 
-    st.write(scaled_data)
+        st.markdown("<h2 style='text-align: center; color: violet;'>Modify Data</h1>",
+                    unsafe_allow_html=True)
+
+        st.write("Please click the data on x column to delete the record.")
+
+        # Initating Data Editor
+        data_editor_variable = st.data_editor(
+            modified_df,
+            key="data_editor",
+            on_change=callback,
+            hide_index=False,
+            column_config=column_config
+        )
+
+        st.write(st.session_state.data_editor)
+
+        if "data" not in st.session_state:
+            st.session_state['data'] = data_editor_variable
+        else:
+            st.session_state['data'] = data_editor_variable
+
+    else:
+        st.write("")
