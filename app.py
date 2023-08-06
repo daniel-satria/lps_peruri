@@ -426,6 +426,7 @@ if menu_selected == "Modelling":
     # Configuring Classification Task
     if task_selected == "Classification":
 
+        # Adding one space
         st.markdown("<br>", unsafe_allow_html=True)
 
         if "scaled_data_train" in st.session_state:
@@ -786,6 +787,45 @@ if menu_selected == "Modelling":
     # Configuring Regression Task
     if task_selected == "Regression":
 
+        # Adding one space
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        if "scaled_data_train" in st.session_state:
+            st.write(st.session_state.scaled_data_train)
+        else:
+            # Setting the upload variabel
+            uploaded_file = st.file_uploader("Choose a file to upload for training data",
+                                             type="csv",
+                                             help="The file will be used for training the Machine Learning",
+                                             )
+
+            # Setting the upload options when there's file on uploader menu
+            if uploaded_file is not None:
+                try:
+                    # Uploading Dataframe
+                    dataframe = get_data(uploaded_file)
+
+                    X = dataframe.drop(columns="Outcome")
+                    y = dataframe["Outcome"]
+
+                    # Storing dataframe to session state
+                    if 'X' not in st.session_state:
+                        st.session_state["X"] = X
+
+                    if 'y' not in st.session_state:
+                        st.session_state["y"] = y
+
+                except:
+                    st.write("Please upload any data")
+
+        # Markdown to give space
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        st.markdown("<h3 style='text-align: center; color: cyan;'>Model Configuration</h3>",
+                    unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+
         # Showing option of the Model
         model_selection = st.selectbox(
             "Select Machine Learning Model for Regression Task",
@@ -1143,10 +1183,17 @@ if menu_selected == "Modelling":
                 X_train = st.session_state.scaled_data_train
 
                 # Fitting data to model and getting clusters
-                clusters = kmeans_obj.fit(X_train)
+                clusters = kmeans_obj.fit_predict(X_train)
 
                 # Adding two spaces
                 st.markdown("<br>", unsafe_allow_html=True)
                 st.markdown("<br>", unsafe_allow_html=True)
 
                 st.success("Training Success")
+
+                # Copy original data into new variable
+                data_full_clustered = st.session_state.data.copy()
+
+                # Added clusters into data and showing them accoridngly
+                data_full_clustered['Cluster'] = clusters
+                st.write(data_full_clustered)
