@@ -400,7 +400,12 @@ if menu_selected == "Data Engineering":
 
                 st.success("The data have been scaled!")
 
+                # Showing scaled data train
                 st.write(scaled_data_train_df)
+                st.write(":green[Scaled data train shape :]",
+                         scaled_data_train_df.shape)
+
+                st.session_state.scaled_data_train = scaled_data_train_df
 
 # Configuring Modelling Menu
 if menu_selected == "Modelling":
@@ -454,6 +459,7 @@ if menu_selected == "Modelling":
         # Markdown to give space
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
+
         st.markdown("<h3 style='text-align: center; color: cyan;'>Model Configuration</h3>",
                     unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
