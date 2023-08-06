@@ -27,10 +27,10 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans
 
 from sklearn.metrics import classification_report
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score, mean_squared_error
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.metrics import mean_absolute_error, r2_score
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics.cluster import calinski_harabasz_score, davies_bouldin_score
 
 from sklearn.model_selection import train_test_split
 
@@ -1102,6 +1102,48 @@ if menu_selected == "Modelling":
     # Configuring Clustering Task
     if task_selected == "Clustering":
 
+        # Adding one space
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        if "scaled_data_train" in st.session_state:
+            st.write(st.session_state.scaled_data_train)
+        else:
+            # Setting the upload variabel
+            uploaded_file = st.file_uploader("Choose a file to upload for training data",
+                                             type="csv",
+                                             help="The file will be used for training the Machine Learning",
+                                             )
+
+            # Setting the upload options when there's file on uploader menu
+            if uploaded_file is not None:
+                try:
+                    # Uploading Dataframe
+                    dataframe = get_data(uploaded_file)
+
+                    X = dataframe.drop(columns="Outcome")
+                    y = dataframe["Outcome"]
+
+                    # Storing dataframe to session state
+                    if 'X' not in st.session_state:
+                        st.session_state["X"] = X
+
+                    if 'y' not in st.session_state:
+                        st.session_state["y"] = y
+
+                except:
+                    st.write("Please upload any data")
+
+        # Giving two spaces
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        st.markdown("<h3 style='text-align: center; color: cyan;'>Model Configuration</h3>",
+                    unsafe_allow_html=True)
+
+        # Giving one spaces
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # Option for Clustering Model
         model_selection = st.selectbox(
             "Select Machine Learning Model for Clustering Task",
             ("K-Means", "Spectral Clustering", "DBSCAN")
@@ -1197,3 +1239,17 @@ if menu_selected == "Modelling":
                 # Added clusters into data and showing them accoridngly
                 data_full_clustered['Cluster'] = clusters
                 st.write(data_full_clustered)
+
+                with st.expander("Show Evaluation Score"):
+
+                    # Adding one space
+                    st.markdown("<br>", unsafe_allow_html=True)
+
+                    st.write("Calinski-Harabasz Index")
+                    st.write(calinski_harabasz_score(X_train, clusters))
+
+                    # Adding one space
+                    st.markdown("<br>", unsafe_allow_html=True)
+
+                    st.write("Davies-Bouldin Index")
+                    st.write(davies_bouldin_score(X_train, clusters))
