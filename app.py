@@ -27,10 +27,10 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans
 
 from sklearn.metrics import classification_report
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score, mean_squared_error
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.metrics import mean_absolute_error, r2_score
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics.cluster import calinski_harabasz_score, davies_bouldin_score
 
 from sklearn.model_selection import train_test_split
 
@@ -190,144 +190,222 @@ if menu_selected == "Data Editing":
 if menu_selected == "Data Engineering":
 
     if 'feature_data' not in st.session_state:
-        st.session_state['feature_data'] = True
+        st.session_state['feature_data'] = ""
 
     if 'target_data' not in st.session_state:
-        st.session_state['target_data'] = True
+        st.session_state['target_data'] = ""
 
     if 'feature_data_train' not in st.session_state:
-        st.session_state['feature_data'] = True
+        st.session_state['feature_data'] = ""
 
     if 'feature_data_test' not in st.session_state:
-        st.session_state['feature_data'] = True
+        st.session_state['feature_data'] = ""
 
     if 'scaled_data_train' not in st.session_state:
-        st.session_state['scaled_data_train'] = True
+        st.session_state['scaled_data_train'] = ""
 
     if 'scaled_data_test' not in st.session_state:
-        st.session_state['scaled_data_test'] = True
+        st.session_state['scaled_data_test'] = ""
 
     if 'y_train' not in st.session_state:
-        st.session_state['y_train'] = True
+        st.session_state['y_train'] = ""
 
     if 'y_test' not in st.session_state:
-        st.session_state['y_test'] = True
+        st.session_state['y_test'] = ""
 
-    # Assigning upload file variab;e
-    uploaded_file = st.file_uploader("Choose a file to upload for training data",
-                                     type="csv",
-                                     help="The file will be used for training",
-                                     )
-    # Configuring uploaded data
-    if uploaded_file is not None:
+    # Making task option menu
+    task_selected = option_menu("", ["Engineering for Classification/Regression",
+                                     "Engineering for Clustering"],
+                                icons=["house", "card-list"],
+                                menu_icon="cast",
+                                orientation="horizontal",
+                                default_index=0,
+                                styles={
+        "nav-link": {"font-size": "15px", "text-align": "center",
+                     "margin": "0px", "--hover-color": "#444444"}
+    })
 
-        # Uploading Dataframe
-        dataframe = get_data(uploaded_file)
+    # Setting engineering for Classification/Regression
+    if task_selected == "Engineering for Classification/Regression":
 
-        # Initiating data on session state
-        if "data" not in st.session_state:
-            st.session_state['data'] = dataframe
+        # Assigning upload file variable
+        uploaded_file = st.file_uploader("Choose a file to upload for training data",
+                                         type="csv",
+                                         help="The file will be used for training",
+                                         )
+        # Configuring uploaded data
+        if uploaded_file is not None:
 
-    else:
-        st.write("Please upload any data to edit.")
+            # Uploading Dataframe
+            dataframe = get_data(uploaded_file)
 
-    if 'data' in st.session_state:
+            # Initiating data on session state
+            if "data" not in st.session_state:
+                st.session_state['data'] = dataframe
 
-        pilihan_kolom = list(st.session_state.data.columns)
+        else:
+            st.write("Please upload any data to edit.")
 
-        # Making column for selecting feature and target
-        col1, col2 = st.columns(2)
+        # Menu if data already stored in session state for classification/regression
+        if 'data' in st.session_state:
 
-        # Assigning option for feature column
-        with col1:
-            feature_column = st.multiselect("Select any column",
+            pilihan_kolom = list(st.session_state.data.columns)
+
+            # Making column for selecting feature and target
+            col1, col2 = st.columns(2)
+
+            # Assigning option for feature column
+            with col1:
+                feature_column = st.multiselect("Select any column to be featured for Classification/Regression",
+                                                st.session_state.data.columns,
+                                                default=list(
+                                                    st.session_state.data.columns),
+                                                placeholder="Select columns")
+
+            # Assigning option for target column
+            with col2:
+                target_column = st.selectbox("Select column to be the target",
+                                             st.session_state.data.columns)
+
+            # Giving two spaces
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown("<br>", unsafe_allow_html=True)
+
+            # Making column for showing features and target
+            col3, col4 = st.columns([3, 1])
+
+            with col3:
+                st.write("List of Feature Data")
+                st.write(st.session_state.data[feature_column])
+                st.write("Feature column shape : ",
+                         st.session_state.data[feature_column].shape)
+
+            with col4:
+                st.write("Target Data")
+                st.write(st.session_state.data[target_column])
+
+            st.session_state['feature_data'] = st.session_state.data[feature_column]
+            st.session_state['target_data'] = st.session_state.data[target_column]
+
+            if st.checkbox("Scale Data"):
+                # Splitting data to train and test
+                X_train, X_test, y_train, y_test = train_test_split(
+                    st.session_state.feature_data,
+                    st.session_state.target_data,
+                    test_size=0.25,
+                    random_state=555
+                )
+
+                # Assigning Scaler Object and fitting the data
+                scaler = MinMaxScaler()
+
+                # Fitting anf transforming the data
+                scaled_data_train = scaler.fit_transform(X_train,
+                                                         y_train)
+
+                # Making dataframe out of scaled data train
+                scaled_data_train_df = pd.DataFrame(
+                    scaled_data_train)
+
+                # Transforming data test and make it into dataframe
+                scaled_data_test = scaler.transform(X_test)
+                scaled_data_test_df = pd.DataFrame(scaled_data_test)
+
+                st.success("The data have been scaled!")
+
+                # Showing scaled data
+                st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("<br>", unsafe_allow_html=True)
+
+                # Showing Scaled Data Train
+                st.write("Data Train Scaled")
+                st.write(scaled_data_train)
+                st.write(":green[Scaled Data Train shape :]",
+                         scaled_data_train.shape)
+
+                # Adding two spaces
+                st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("<br>", unsafe_allow_html=True)
+
+                # Showin Scaled Data test
+                st.write("Data test Scaled")
+                st.write(scaled_data_test)
+                st.write(":green[Scaled Data Test shape :]",
+                         scaled_data_test.shape)
+
+                # Reassing session state to be used later
+                st.session_state['scaled_data_train'] = scaled_data_train_df
+                st.session_state['scaled_data_test'] = scaled_data_test_df
+                st.session_state['feature_data_train'] = X_train
+                st.session_state['feature_data_test'] = X_test
+                st.session_state['y_train'] = y_train
+                st.session_state['y_test'] = y_test
+
+        else:
+            st.write("")
+
+    if task_selected == "Engineering for Clustering":
+
+        # Assigning upload file variable
+        uploaded_file = st.file_uploader("Choose a file to upload for training data",
+                                         type="csv",
+                                         help="The file will be used for training",
+                                         )
+        # Configuring uploaded data
+        if uploaded_file is not None:
+
+            # Uploading Dataframe
+            dataframe = get_data(uploaded_file)
+
+            # Initiating data on session state
+            if "data" not in st.session_state:
+                st.session_state['data'] = dataframe
+
+        else:
+            st.write("Please upload any data to edit.")
+
+        # Menu if data already stored in session state for clustering
+        if 'data' in st.session_state:
+
+            pilihan_kolom = list(st.session_state.data.columns)
+
+            # Giving two spaces
+            st.markdown("<br>", unsafe_allow_html=True)
+
+            # Option menu of feature column for clustering
+            feature_column = st.multiselect("Select any column to be featured for Clustering",
                                             st.session_state.data.columns,
                                             default=list(
                                                 st.session_state.data.columns),
                                             placeholder="Select columns")
 
-        # Assigning option for target column
-        with col2:
-            target_column = st.selectbox("Select column to be the target",
-                                         st.session_state.data.columns)
+            # Giving two spaces
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown("<br>", unsafe_allow_html=True)
 
-        # Giving space
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        # Making column for showing features and target
-        col3, col4 = st.columns([3, 1])
-
-        with col3:
-            st.write("List of Feature Data")
+            st.write("Feature Data for Clustering")
             st.write(st.session_state.data[feature_column])
-            st.write("Feature column shape : ",
+            st.session_state['feature_data'] = st.session_state.data[feature_column]
+            st.write(":green[The shape of the data :]",
                      st.session_state.data[feature_column].shape)
 
-        with col4:
-            st.write("Target Data")
-            st.write(st.session_state.data[target_column])
+            if st.checkbox("Scale Data"):
 
-        st.session_state['feature_data'] = st.session_state.data[feature_column]
-        st.session_state['target_data'] = st.session_state.data[target_column]
+                # Initiate scaler object
+                scaler = MinMaxScaler()
 
-        if st.checkbox("Scale Data"):
-            # Splitting data to train and test
-            X_train, X_test, y_train, y_test = train_test_split(
-                st.session_state.feature_data,
-                st.session_state.target_data,
-                test_size=0.25,
-                random_state=555
-            )
+                # Fitting and transforming the data
+                scaled_data_train_df = pd.DataFrame(
+                    scaler.fit_transform(st.session_state.feature_data))
 
-            # Assigning Scaler Object and fitting the data
-            scaler = MinMaxScaler()
+                st.success("The data have been scaled!")
 
-            # Fitting anf transforming the data
-            scaled_data_train = scaler.fit_transform(X_train,
-                                                     y_train)
+                # Showing scaled data train
+                st.write(scaled_data_train_df)
+                st.write(":green[Scaled data train shape :]",
+                         scaled_data_train_df.shape)
 
-            # Making dataframe out of scaled data train
-            scaled_data_train_df = pd.DataFrame(
-                scaled_data_train)
-
-            # Transforming data test and make it into dataframe
-            scaled_data_test = scaler.transform(X_test)
-            scaled_data_test_df = pd.DataFrame(scaled_data_test)
-
-            st.success("The data have been scaled!")
-
-            # Showing scaled data
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown("<br>", unsafe_allow_html=True)
-
-            # Showing Scaled Data Train
-            st.write("Data Train Scaled")
-            st.write(scaled_data_train)
-            st.write(":green[Scaled Data Train shape :]",
-                     scaled_data_train.shape)
-
-            # Adding two spaces
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown("<br>", unsafe_allow_html=True)
-
-            # Showin Scaled Data test
-            st.write("Data test Scaled")
-            st.write(scaled_data_test)
-            st.write(":green[Scaled Data Test shape :]",
-                     scaled_data_test.shape)
-
-            # Reassing session state to be used later
-            st.session_state['scaled_data_train'] = scaled_data_train_df
-            st.session_state['scaled_data_test'] = scaled_data_test_df
-            st.session_state['feature_data_train'] = X_train
-            st.session_state['feature_data_test'] = X_test
-            st.session_state['y_train'] = y_train
-            st.session_state['y_test'] = y_test
-
-    else:
-        st.write("")
-
+                st.session_state.scaled_data_train = scaled_data_train_df
 
 # Configuring Modelling Menu
 if menu_selected == "Modelling":
@@ -348,6 +426,7 @@ if menu_selected == "Modelling":
     # Configuring Classification Task
     if task_selected == "Classification":
 
+        # Adding one space
         st.markdown("<br>", unsafe_allow_html=True)
 
         if "scaled_data_train" in st.session_state:
@@ -378,9 +457,10 @@ if menu_selected == "Modelling":
                 except:
                     st.write("Please upload any data")
 
-        # Markdown to gice space
+        # Markdown to give space
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
+
         st.markdown("<h3 style='text-align: center; color: cyan;'>Model Configuration</h3>",
                     unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
@@ -707,6 +787,45 @@ if menu_selected == "Modelling":
     # Configuring Regression Task
     if task_selected == "Regression":
 
+        # Adding one space
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        if "scaled_data_train" in st.session_state:
+            st.write(st.session_state.scaled_data_train)
+        else:
+            # Setting the upload variabel
+            uploaded_file = st.file_uploader("Choose a file to upload for training data",
+                                             type="csv",
+                                             help="The file will be used for training the Machine Learning",
+                                             )
+
+            # Setting the upload options when there's file on uploader menu
+            if uploaded_file is not None:
+                try:
+                    # Uploading Dataframe
+                    dataframe = get_data(uploaded_file)
+
+                    X = dataframe.drop(columns="Outcome")
+                    y = dataframe["Outcome"]
+
+                    # Storing dataframe to session state
+                    if 'X' not in st.session_state:
+                        st.session_state["X"] = X
+
+                    if 'y' not in st.session_state:
+                        st.session_state["y"] = y
+
+                except:
+                    st.write("Please upload any data")
+
+        # Markdown to give space
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        st.markdown("<h3 style='text-align: center; color: cyan;'>Model Configuration</h3>",
+                    unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+
         # Showing option of the Model
         model_selection = st.selectbox(
             "Select Machine Learning Model for Regression Task",
@@ -983,6 +1102,48 @@ if menu_selected == "Modelling":
     # Configuring Clustering Task
     if task_selected == "Clustering":
 
+        # Adding one space
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        if "scaled_data_train" in st.session_state:
+            st.write(st.session_state.scaled_data_train)
+        else:
+            # Setting the upload variabel
+            uploaded_file = st.file_uploader("Choose a file to upload for training data",
+                                             type="csv",
+                                             help="The file will be used for training the Machine Learning",
+                                             )
+
+            # Setting the upload options when there's file on uploader menu
+            if uploaded_file is not None:
+                try:
+                    # Uploading Dataframe
+                    dataframe = get_data(uploaded_file)
+
+                    X = dataframe.drop(columns="Outcome")
+                    y = dataframe["Outcome"]
+
+                    # Storing dataframe to session state
+                    if 'X' not in st.session_state:
+                        st.session_state["X"] = X
+
+                    if 'y' not in st.session_state:
+                        st.session_state["y"] = y
+
+                except:
+                    st.write("Please upload any data")
+
+        # Giving two spaces
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        st.markdown("<h3 style='text-align: center; color: cyan;'>Model Configuration</h3>",
+                    unsafe_allow_html=True)
+
+        # Giving one spaces
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # Option for Clustering Model
         model_selection = st.selectbox(
             "Select Machine Learning Model for Clustering Task",
             ("K-Means", "Spectral Clustering", "DBSCAN")
@@ -1064,10 +1225,31 @@ if menu_selected == "Modelling":
                 X_train = st.session_state.scaled_data_train
 
                 # Fitting data to model and getting clusters
-                clusters = kmeans_obj.fit(X_train)
+                clusters = kmeans_obj.fit_predict(X_train)
 
                 # Adding two spaces
                 st.markdown("<br>", unsafe_allow_html=True)
                 st.markdown("<br>", unsafe_allow_html=True)
 
                 st.success("Training Success")
+
+                # Copy original data into new variable
+                data_full_clustered = st.session_state.data.copy()
+
+                # Added clusters into data and showing them accoridngly
+                data_full_clustered['Cluster'] = clusters
+                st.write(data_full_clustered)
+
+                with st.expander("Show Evaluation Score"):
+
+                    # Adding one space
+                    st.markdown("<br>", unsafe_allow_html=True)
+
+                    st.write("Calinski-Harabasz Index")
+                    st.write(calinski_harabasz_score(X_train, clusters))
+
+                    # Adding one space
+                    st.markdown("<br>", unsafe_allow_html=True)
+
+                    st.write("Davies-Bouldin Index")
+                    st.write(davies_bouldin_score(X_train, clusters))
