@@ -40,7 +40,7 @@ warnings.simplefilter(action='ignore')
 
 
 # Page configuration
-st.set_page_config(page_title="Simple AI",
+st.set_page_config(page_title="True AI",
                    page_icon="assets/paques-favicon.ico", layout="wide",
                    )
 
@@ -60,16 +60,16 @@ with st.sidebar:
                                 default_index=0,
                                 styles={
                                     "container": {"padding": "0!important", "background-color": "#272e2f"},
-                                    # "icon": {"color": "orange", "font-size": "25px"}, 
-                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444"},
+                                    # "icon": {"color": "orange", "font-size": "25px"},
+                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin": "0px", "--hover-color": "#444444"},
                                     "nav-link-selected": {"color": "#5CC5CD", "background-color": "rgba(128, 128, 128, 0.1)"}
-                                })
+    })
 
 # Configuring home menu
 if menu_selected == "Home":
     # st.write("Welcome")
     st.image("assets/trueai-header.png",
-                 output_format='PNG')
+             output_format='PNG')
 
 # Configuring data exploration menu
 if menu_selected == "Data Exploration":
@@ -96,7 +96,7 @@ if menu_selected == "Data Exploration":
 
         except:
             st.markdown("<span class='info-box'>Please upload any data</span>",
-                    unsafe_allow_html=True)
+                        unsafe_allow_html=True)
 
     # Showing the uploaded file from session state
     try:
@@ -157,7 +157,7 @@ if menu_selected == "Data Editing":
 
     if "uploaded_file" not in st.session_state:
         st.markdown("<span class='info-box'>Please upload any data</span>",
-                unsafe_allow_html=True)
+                    unsafe_allow_html=True)
 
     else:
 
@@ -247,13 +247,16 @@ if menu_selected == "Data Engineering":
                                 default_index=0,
                                 styles={
                                     "container": {"background-color": "#272e2f"},
-                                    # "icon": {"color": "orange", "font-size": "25px"}, 
-                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444", "text-align-last": "center"},
+                                    # "icon": {"color": "orange", "font-size": "25px"},
+                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin": "0px", "--hover-color": "#444444", "text-align-last": "center"},
                                     "nav-link-selected": {"color": "#5CC5CD", "background-color": "rgba(128, 128, 128, 0.1)"}
-                                })
+    })
 
     # Setting engineering for Classification/Regression
     if task_selected == "Engineering for Classification/Regression":
+
+        # Adding one space
+        st.markdown("<br>", unsafe_allow_html=True)
 
         # Assigning upload file variable
         uploaded_file = st.file_uploader("Choose a file to upload for training data",
@@ -345,7 +348,8 @@ if menu_selected == "Data Engineering":
                 st.markdown("<br>", unsafe_allow_html=True)
 
                 # Showing Scaled Data Train
-                st.write("Data Train Scaled")
+                st.markdown("<h4 class='menu-secondary'>Data Train Scaled</h3>",
+                            unsafe_allow_html=True)  # edit dhanis
                 st.write(scaled_data_train)
                 st.write(":green[Scaled Data Train shape :]",
                          scaled_data_train.shape)
@@ -355,7 +359,8 @@ if menu_selected == "Data Engineering":
                 st.markdown("<br>", unsafe_allow_html=True)
 
                 # Showin Scaled Data test
-                st.write("Data test Scaled")
+                st.markdown("<h4 class='menu-secondary'>Data Test Scaled</h3>",
+                            unsafe_allow_html=True)  # edit dhanis
                 st.write(scaled_data_test)
                 st.write(":green[Scaled Data Test shape :]",
                          scaled_data_test.shape)
@@ -372,6 +377,9 @@ if menu_selected == "Data Engineering":
             st.write("")
 
     if task_selected == "Engineering for Clustering":
+
+        # Adding one space
+        st.markdown("<br>", unsafe_allow_html=True)
 
         # Assigning upload file variable
         uploaded_file = st.file_uploader("Choose a file to upload for training data",
@@ -427,7 +435,12 @@ if menu_selected == "Data Engineering":
 
                 st.success("The data have been scaled!")
 
+                # Giving one space
+                st.markdown("<br>", unsafe_allow_html=True)
+
                 # Showing scaled data train
+                st.markdown("<h4 class='menu-secondary'>Data Train Scaled</h3>",
+                            unsafe_allow_html=True)  # edit dhanis
                 st.write(scaled_data_train_df)
                 st.write(":green[Scaled data train shape :]",
                          scaled_data_train_df.shape)
@@ -451,10 +464,10 @@ if menu_selected == "Modelling":
                                 default_index=0,
                                 styles={
                                     "container": {"background-color": "#272e2f"},
-                                    # "icon": {"color": "orange", "font-size": "25px"}, 
-                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444", "text-align-last": "center"},
+                                    # "icon": {"color": "orange", "font-size": "25px"},
+                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin": "0px", "--hover-color": "#444444", "text-align-last": "center"},
                                     "nav-link-selected": {"color": "#5CC5CD", "background-color": "rgba(128, 128, 128, 0.1)"}
-                                })
+    })
 
     # Configuring Classification Task
     if task_selected == "Classification":
@@ -489,9 +502,9 @@ if menu_selected == "Modelling":
 
                 except:
                     st.markdown("<span class='info-box'>Please upload any data</span>",
-                            unsafe_allow_html=True)
+                                unsafe_allow_html=True)
 
-        # Markdown to give space
+        # Adding one space
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<h3 class='menu-secondary'>Model Configuration</h3>",
                     unsafe_allow_html=True)
@@ -501,13 +514,16 @@ if menu_selected == "Modelling":
             "Select Machine Learning Model for Classification Task",
             ("Logistic Regression", "Random Forest")
         )
-        
+
         st.write("Model selected:", model_selection)
 
         # Setting Logistic Regression Model
         if model_selection == "Logistic Regression":
 
             col1, col2, col3 = st.columns(3)
+
+            # Adding one space
+            st.markdown("<br>", unsafe_allow_html=True)
 
             with col1:
                 # Setting Logistic Regression Penalty
@@ -604,7 +620,9 @@ if menu_selected == "Modelling":
                     data_train_full_prediction = pd.concat([st.session_state.feature_data_train,
                                                             y_train_df, y_train_predict_df],
                                                            axis=1)
-                    st.write('Data Train')
+
+                    st.markdown("<h4 class='menu-secondary'>Data Train with Prediction</h4>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(data_train_full_prediction)
 
                     # Renaming target columns name of test data
@@ -618,7 +636,8 @@ if menu_selected == "Modelling":
                     data_test_full_prediction = pd.concat([st.session_state.feature_data_test,
                                                            y_test_df, y_test_predict_df],
                                                           axis=1)
-                    st.write('Data Test')
+                    st.markdown("<h4 class='menu-secondary'>Data Test with Prediction</h4>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(data_test_full_prediction)
 
                 # Giving space
@@ -627,30 +646,38 @@ if menu_selected == "Modelling":
 
                 # Showing score
                 with st.expander("Show Classification Score"):
-                    st.write("Train Score")
+                    st.markdown("<h4 class='menu-secondary'>Train Score</h4>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(classification_report_train)
-                    st.write("Test Score")
+                    st.markdown("<h4 class='menu-secondary'>Test Score</h4>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(classification_report_test)
 
-                # Giving space
+                # Giving two spaces
                 st.markdown("<br>", unsafe_allow_html=True)
                 st.markdown("<br>", unsafe_allow_html=True)
 
                 # Showing ROC-AUC Score
                 with st.expander("Show ROC-AUC Report"):
-                    st.write("Train ROC-AUC Score")
+                    st.markdown("<h5 class='menu-secondary'>Train ROC-AUC Score</h5>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(roc_auc_score(
                         y_train, log_res_obj.predict_proba(X_train)[:, 1]))
-                    st.write("Train ROC-AUC Score")
+                    st.markdown("<h5 class='menu-secondary'>Test ROC-AUC Score</h5>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(roc_auc_score(
                         y_test, log_res_obj.predict_proba(X_test)[:, 1]))
 
-                # Giving space
+                # Giving two spaces
                 st.markdown("<br>", unsafe_allow_html=True)
                 st.markdown("<br>", unsafe_allow_html=True)
 
                 # Showing Confusion Matrix
                 with st.expander("Show Confusion Matrix"):
+
+                    st.markdown("<h4 class='menu-secondary'>Confusion Matrix Score</h4>",
+                                unsafe_allow_html=True)  # edit dhanis
+
                     # Showing Confusion Matrix Display
                     cm = confusion_matrix(
                         y_test, y_test_predict, labels=[0, 1])
@@ -761,7 +788,9 @@ if menu_selected == "Modelling":
                     data_train_full_prediction = pd.concat([st.session_state.feature_data_train,
                                                             y_train_df, y_train_predict_df],
                                                            axis=1)
-                    st.write('Data Train')
+
+                    st.markdown("<h5 class='menu-secondary'>Data Train with Prediction</h5>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(data_train_full_prediction)
 
                     # Renaming target columns name of test data
@@ -775,7 +804,9 @@ if menu_selected == "Modelling":
                     data_test_full_prediction = pd.concat([st.session_state.feature_data_test,
                                                            y_test_df, y_test_predict_df],
                                                           axis=1)
-                    st.write('Data Test')
+
+                    st.markdown("<h4 class='menu-secondary'>Data Test with Prediction</h5>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(data_test_full_prediction)
 
                 # Giving space
@@ -784,9 +815,11 @@ if menu_selected == "Modelling":
 
                 # Showing Classification Report Score
                 with st.expander("See Classification Score"):
-                    st.write("Train Score")
+                    st.markdown("<h4 class='menu-secondary'>Train Score</h4>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(classification_report_train)
-                    st.write("Test Score")
+                    st.markdown("<h4 class='menu-secondary'>Test Score</h4>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(classification_report_test)
 
                     # Giving space
@@ -806,6 +839,10 @@ if menu_selected == "Modelling":
                 st.markdown("<br>", unsafe_allow_html=True)
 
                 with st.expander("See Confusion Matrix"):
+
+                    st.markdown("<h4 class='menu-secondary'>Confusion Matrix Score</h4>",
+                                unsafe_allow_html=True)  # edit dhanis
+
                     # Showing Confusion Matrix Display
                     cm = confusion_matrix(
                         y_test, y_test_predict, labels=[0, 1])
@@ -954,7 +991,9 @@ if menu_selected == "Modelling":
                     data_train_full_prediction = pd.concat([st.session_state.feature_data_train,
                                                             y_train_df, y_train_predict_df],
                                                            axis=1)
-                    st.write('Data Train')
+
+                    st.markdown("<h4 class='menu-secondary'>Data Train with Prediction</h4>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(data_train_full_prediction)
 
                     # Renaming target columns name of test data
@@ -968,7 +1007,9 @@ if menu_selected == "Modelling":
                     data_test_full_prediction = pd.concat([st.session_state.feature_data_test,
                                                            y_test_df, y_test_predict_df],
                                                           axis=1)
-                    st.write('Data Test')
+
+                    st.markdown("<h4 class='menu-secondary'>Data Test with Prediction</h4>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(data_test_full_prediction)
 
                 # Adding one space
@@ -985,7 +1026,7 @@ if menu_selected == "Modelling":
                 st.markdown("<br>", unsafe_allow_html=True)
 
                 # Showing score
-                with st.expander("Show Squarred Score"):
+                with st.expander("Show Mean Squarred Score"):
                     st.write("Train Score")
                     st.write(mse_train)
                     st.write("Test Score")
@@ -1093,7 +1134,9 @@ if menu_selected == "Modelling":
                     data_train_full_prediction = pd.concat([st.session_state.feature_data_train,
                                                             y_train_df, y_train_predict_df],
                                                            axis=1)
-                    st.write('Data Train')
+
+                    st.markdown("<h4 class='menu-secondary'>Data Train with Prediction</h4>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(data_train_full_prediction)
 
                     # Renaming target columns name of test data
@@ -1107,7 +1150,9 @@ if menu_selected == "Modelling":
                     data_test_full_prediction = pd.concat([st.session_state.feature_data_test,
                                                            y_test_df, y_test_predict_df],
                                                           axis=1)
-                    st.write('Data Test')
+
+                    st.markdown("<h4 class='menu-secondary'>Data Test with Prediction</h4>",
+                                unsafe_allow_html=True)  # edit dhanis
                     st.write(data_test_full_prediction)
 
                 # Adding one space
@@ -1267,8 +1312,13 @@ if menu_selected == "Modelling":
                 # Copy original data into new variable
                 data_full_clustered = st.session_state.data.copy()
 
+                # Adding one space
+                st.markdown("<br>", unsafe_allow_html=True)
+
                 # Added clusters into data and showing them accoridngly
                 data_full_clustered['Cluster'] = clusters
+                st.markdown("<h4 class='menu-secondary'>Original Data with Clusters</h3>",
+                            unsafe_allow_html=True)  # edit dhanis
                 st.write(data_full_clustered)
 
                 with st.expander("Show Evaluation Score"):
