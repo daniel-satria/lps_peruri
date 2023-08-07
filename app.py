@@ -76,13 +76,15 @@ if menu_selected == "Data Exploration":
 
     st.markdown("<h2 class='menu-title'>Data Exploration</h2>",
                 unsafe_allow_html=True)
+    st.markdown("<h6 class='menu-subtitle'>Analyzing and visualizing a dataset to gain a deeper understanding of its characteristics, structure, and potential patterns</h6>",
+                unsafe_allow_html=True)
     st.markdown("<hr class='menu-divider' />",
                 unsafe_allow_html=True)
 
     # Setting the upload variabel
     uploaded_file = st.file_uploader("Choose a file to upload for training data",
                                      type="csv",
-                                     help="The file will be used for training the Machine Learning",
+                                     help="The supported file is only in csv formatted",
                                      )
 
     # Setting the upload options when there's file on uploader menu
@@ -120,6 +122,8 @@ if menu_selected == "Data Editing":
 
     st.markdown("<h2 class='menu-title'>Data Editing</h2>",
                 unsafe_allow_html=True)
+    st.markdown("<h6 class='menu-subtitle'>Reviewing, cleaning, and modifying the dataset to address various data quality issues before using it to train a machine learning model</h6>",
+                unsafe_allow_html=True)
     st.markdown("<hr class='menu-divider' />",
                 unsafe_allow_html=True)
 
@@ -140,9 +144,9 @@ if menu_selected == "Data Editing":
     else:
 
         # Upload data variable if there is no data uploaded_file in session state
-        uploaded_file = st.file_uploader("Choose a file to upload for training data",
+        uploaded_file = st.file_uploader("Choose a file to upload for exploring",
                                          type="csv",
-                                         help="The file will be used for training",
+                                         help="The supported file is only in csv formatted",
                                          )
 
         # Confiuring uploaded data
@@ -211,6 +215,8 @@ if menu_selected == "Data Engineering":
 
     st.markdown("<h2 class='menu-title'>Data Engineering</h2>",
                 unsafe_allow_html=True)
+    st.markdown("<h6 class='menu-subtitle'>Transforming raw data into a structured and usable format for training machine learning</h6>",
+                unsafe_allow_html=True)
     st.markdown("<hr class='menu-divider' />",
                 unsafe_allow_html=True)
 
@@ -261,7 +267,7 @@ if menu_selected == "Data Engineering":
         # Assigning upload file variable
         uploaded_file = st.file_uploader("Choose a file to upload for training data",
                                          type="csv",
-                                         help="The file will be used for training",
+                                         help="The supported file is only in csv formatted",
                                          )
         # Configuring uploaded data
         if uploaded_file is not None:
@@ -452,7 +458,7 @@ if menu_selected == "Modelling":
 
     st.markdown("<h2 class='menu-title'>Modelling</h2>",
                 unsafe_allow_html=True)
-    st.markdown("<h6 class='menu-subtitle'>Machine Learning Menu</h6>",
+    st.markdown("<h6 class='menu-subtitle'>Designing machine learning model alghorithm and its hyper-parameters</h6>",
                 unsafe_allow_html=True)
     st.markdown("<hr class='menu-divider' />",
                 unsafe_allow_html=True)
@@ -506,8 +512,8 @@ if menu_selected == "Modelling":
 
         # Adding one space
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<h3 class='menu-secondary'>Model Configuration</h3>",
-                    unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center'>Model Configuration</h3>",
+                    unsafe_allow_html=True)  # edit dhanis
 
         # Selecting Model for Classification
         model_selection = st.selectbox(
@@ -528,20 +534,20 @@ if menu_selected == "Modelling":
             with col1:
                 # Setting Logistic Regression Penalty
                 log_res_penalty = st.radio(
-                    ":blue[Norm of the penalty]",
+                    "Norm of the penalty",
                     ('l2', 'l1', 'none'))
 
             with col2:
                 # Setting Logistis Regression Solver
                 log_res_solver = st.radio(
-                    ":blue[Algorithm optimization]",
+                    "Algorithm optimization",
                     ("lbfgs", "liblinear", "newton-cg", "newton-cholesky", "sag", "saga"
                      ))
 
             with col3:
                 # Inverse of regularization strength
                 log_res_inverse = st.number_input(
-                    ":blue[Inverse of regularization]",
+                    "Inverse of regularization",
                     min_value=0.001,
                     value=1.0,
                     step=0.01)
@@ -695,13 +701,13 @@ if menu_selected == "Modelling":
             with col1:
                 # Setting Random Forest Classifier Split Criterion
                 rfc_criterion = st.radio(
-                    ":blue[Split Criterion]",
+                    "Split Criterion",
                     ('gini', 'entropy', 'log_loss'))
 
             with col2:
                 # Minimal Sample Split
                 rfc_max_depth = st.number_input(
-                    ":blue[Maximum Depth of the Tree]",
+                    "Maximum Depth of the Tree",
                     min_value=2,
                     value=100,
                     step=1)
@@ -709,7 +715,7 @@ if menu_selected == "Modelling":
             with col3:
                 # Minimum number of samples to be at a left node
                 rfc_min_samples_leaf = st.number_input(
-                    ":blue[Minium Sample Leaf]",
+                    "Minium Sample Leaf",
                     min_value=2,
                     step=1)
 
@@ -908,7 +914,7 @@ if menu_selected == "Modelling":
 
             # Setting Linear Regression fitting intercept
             lin_reg_fit_intercept = st.radio(
-                ":blue[Calculating the intercept for the model]",
+                "Calculating the intercept for the model",
                 (True, False)
             )
             # Adding one space
@@ -916,7 +922,7 @@ if menu_selected == "Modelling":
 
             # Setting Linear Regression positive coefficients
             lin_reg_positive = st.radio(
-                ":blue[Forcing the coefficients to be positive]",
+                "Forcing the coefficients to be positive",
                 (False, True)
             )
 
@@ -1044,14 +1050,14 @@ if menu_selected == "Modelling":
             with col1:
                 # Setting Random Forest Classifier Split Criterion
                 rfr_criterion = st.radio(
-                    ":blue[Split Criterion]",
+                    "Split Criterion",
                     ('squared_error', 'absolute_error',
                      'friedman_mse', 'poisson'))
 
             with col2:
                 # Minimal Sample Split
                 rfr_max_depth = st.number_input(
-                    ":blue[Maximum Depth of the Tree]",
+                    "Maximum Depth of the Tree",
                     min_value=2,
                     value=100,
                     step=1)
@@ -1059,7 +1065,7 @@ if menu_selected == "Modelling":
             with col3:
                 # Minimum number of samples to be at a left node
                 rfr_min_samples_leaf = st.number_input(
-                    ":blue[Minium Sample Leaf]",
+                    "Minium Sample Leaf",
                     min_value=2,
                     step=1)
 
@@ -1213,8 +1219,8 @@ if menu_selected == "Modelling":
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
 
-        st.markdown("<h3 style='text-align: center; color: cyan;'>Model Configuration</h3>",
-                    unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center'>Model Configuration</h3>",
+                    unsafe_allow_html=True)  # edit dhanis
 
         # Giving one spaces
         st.markdown("<br>", unsafe_allow_html=True)
@@ -1239,13 +1245,13 @@ if menu_selected == "Modelling":
             # Making variable of K-Means' hyper-parameter input
             with col1:
                 algorithm = st.radio(
-                    ":blue[K-Means Algorithm]",
+                    "K-Means Algorithm",
                     ("lloyd", "elkan")
                 )
 
             with col2:
                 n_clusters = st.number_input(
-                    ":blue[Number of Clusters]",
+                    "Number of Clusters",
                     min_value=2,
                     value=3,
                     step=1
@@ -1253,7 +1259,7 @@ if menu_selected == "Modelling":
 
             with col3:
                 max_iter = st.number_input(
-                    ":blue[Maximum of iterations]",
+                    "Maximum of iterations",
                     min_value=2,
                     value=300,
                     step=1
@@ -1264,13 +1270,13 @@ if menu_selected == "Modelling":
 
             with col5:
                 init = st.radio(
-                    ":blue[Method of initialization]",
+                    "Method of initialization",
                     ("k-means++", "random")
                 )
 
             with col6:
                 n_init = st.number_input(
-                    ":blue[Number of Run Different Centroid Seeds]",
+                    "[Number of Run Different Centroid Seeds",
                     min_value=2,
                     value=10,
                     step=1
@@ -1278,7 +1284,7 @@ if menu_selected == "Modelling":
 
             with col7:
                 random_state = st.number_input(
-                    ":blue[Random state]",
+                    "[Random state",
                     min_value=1,
                     value=555,
                     step=1
