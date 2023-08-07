@@ -15,6 +15,7 @@ from numpy import NaN
 import pandas as pd
 from streamlit_pandas_profiling import st_profile_report
 import pandas_profiling
+import util as utl
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import LinearRegression
@@ -43,28 +44,40 @@ st.set_page_config(page_title="Simple AI",
                    page_icon="assets/paques-favicon.ico", layout="wide",
                    )
 
+# Loading CSS
+utl.local_css("assets/custom.css")
+
 # Logo in side bar configuration
 st.sidebar.image("assets/paques-navbar-logo.png",
-                 output_format='PNG', width=150)
+                 output_format='PNG')
 
 # Sidebar Menu
 with st.sidebar:
-    menu_selected = option_menu("Menu", ["Home", "Data Exploration", "Data Editing", "Data Engineering", "Modelling"],
+    menu_selected = option_menu("", ["Home", "Data Exploration", "Data Editing", "Data Engineering", "Modelling"],
                                 icons=["house", "card-list", "award",
                                        "columns-gap", "gear"],
                                 menu_icon="cast",
                                 default_index=0,
                                 styles={
-                                "nav-link": {"font-size": "15px", "text-align": "left",
-                                             "margin": "0px", "--hover-color": "#444444"}
+                                    "container": {"padding": "0!important", "background-color": "#272e2f"},
+                                    # "icon": {"color": "orange", "font-size": "25px"}, 
+                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444"},
+                                    "nav-link-selected": {"color": "#5CC5CD", "background-color": "rgba(128, 128, 128, 0.1)"}
                                 })
 
 # Configuring home menu
 if menu_selected == "Home":
-    st.write("Welcome")
+    # st.write("Welcome")
+    st.image("assets/trueai-header.png",
+                 output_format='PNG')
 
 # Configuring data exploration menu
 if menu_selected == "Data Exploration":
+
+    st.markdown("<h2 class='menu-title'>Data Exploration</h2>",
+                unsafe_allow_html=True)
+    st.markdown("<hr class='menu-divider' />",
+                unsafe_allow_html=True)
 
     # Setting the upload variabel
     uploaded_file = st.file_uploader("Choose a file to upload for training data",
@@ -82,7 +95,8 @@ if menu_selected == "Data Exploration":
             st.session_state["uploaded_file"] = dataframe
 
         except:
-            st.write("Please upload any data")
+            st.markdown("<span class='info-box'>Please upload any data</span>",
+                    unsafe_allow_html=True)
 
     # Showing the uploaded file from session state
     try:
@@ -104,6 +118,11 @@ if menu_selected == "Data Exploration":
 # Configuring Data Editing Menu
 if menu_selected == "Data Editing":
 
+    st.markdown("<h2 class='menu-title'>Data Editing</h2>",
+                unsafe_allow_html=True)
+    st.markdown("<hr class='menu-divider' />",
+                unsafe_allow_html=True)
+
     # Bringing back the data from uploaded_file session_state
     if "uploaded_file" in st.session_state:
 
@@ -114,7 +133,7 @@ if menu_selected == "Data Editing":
         if "data" not in st.session_state:
             st.session_state.data = dataframe
 
-        st.markdown("<h2 style='text-align: center; color: red;'>Original Data</h1>",
+        st.markdown("<h3 class='menu-secondary'>Original Data</h3>",
                     unsafe_allow_html=True)
         st.write(dataframe)
 
@@ -137,7 +156,8 @@ if menu_selected == "Data Editing":
             st.session_state.uploaded_file = dataframe
 
     if "uploaded_file" not in st.session_state:
-        st.write("Please upload any data")
+        st.markdown("<span class='info-box'>Please upload any data</span>",
+                unsafe_allow_html=True)
 
     else:
 
@@ -189,6 +209,11 @@ if menu_selected == "Data Editing":
 # Configuring Data Engineering Menu
 if menu_selected == "Data Engineering":
 
+    st.markdown("<h2 class='menu-title'>Data Engineering</h2>",
+                unsafe_allow_html=True)
+    st.markdown("<hr class='menu-divider' />",
+                unsafe_allow_html=True)
+
     if 'feature_data' not in st.session_state:
         st.session_state['feature_data'] = ""
 
@@ -221,9 +246,11 @@ if menu_selected == "Data Engineering":
                                 orientation="horizontal",
                                 default_index=0,
                                 styles={
-        "nav-link": {"font-size": "15px", "text-align": "center",
-                     "margin": "0px", "--hover-color": "#444444"}
-    })
+                                    "container": {"background-color": "#272e2f"},
+                                    # "icon": {"color": "orange", "font-size": "25px"}, 
+                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444", "text-align-last": "center"},
+                                    "nav-link-selected": {"color": "#5CC5CD", "background-color": "rgba(128, 128, 128, 0.1)"}
+                                })
 
     # Setting engineering for Classification/Regression
     if task_selected == "Engineering for Classification/Regression":
@@ -410,7 +437,11 @@ if menu_selected == "Data Engineering":
 # Configuring Modelling Menu
 if menu_selected == "Modelling":
 
-    st.markdown("<h2 style='text-align: center; color: red;'>Machine Learning Modelling Menu</h1>",
+    st.markdown("<h2 class='menu-title'>Modelling</h2>",
+                unsafe_allow_html=True)
+    st.markdown("<h6 class='menu-subtitle'>Machine Learning Menu</h6>",
+                unsafe_allow_html=True)
+    st.markdown("<hr class='menu-divider' />",
                 unsafe_allow_html=True)
 
     task_selected = option_menu("", ["Classification", "Regression", "Clustering"],
@@ -419,9 +450,11 @@ if menu_selected == "Modelling":
                                 orientation="horizontal",
                                 default_index=0,
                                 styles={
-        "nav-link": {"font-size": "15px", "text-align": "center",
-                     "margin": "0px", "--hover-color": "#444444"}
-    })
+                                    "container": {"background-color": "#272e2f"},
+                                    # "icon": {"color": "orange", "font-size": "25px"}, 
+                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444", "text-align-last": "center"},
+                                    "nav-link-selected": {"color": "#5CC5CD", "background-color": "rgba(128, 128, 128, 0.1)"}
+                                })
 
     # Configuring Classification Task
     if task_selected == "Classification":
@@ -455,22 +488,20 @@ if menu_selected == "Modelling":
                         st.session_state["y"] = y
 
                 except:
-                    st.write("Please upload any data")
+                    st.markdown("<span class='info-box'>Please upload any data</span>",
+                            unsafe_allow_html=True)
 
         # Markdown to give space
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        st.markdown("<h3 style='text-align: center; color: cyan;'>Model Configuration</h3>",
+        st.markdown("<h3 class='menu-secondary'>Model Configuration</h3>",
                     unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
 
         # Selecting Model for Classification
         model_selection = st.selectbox(
             "Select Machine Learning Model for Classification Task",
             ("Logistic Regression", "Random Forest")
         )
-
+        
         st.write("Model selected:", model_selection)
 
         # Setting Logistic Regression Model
