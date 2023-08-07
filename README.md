@@ -1,4 +1,4 @@
-# Paques Easy ML
+# Paques True AI
 <br />
 <br />
 Made for Peruri and LPS POC
