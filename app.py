@@ -16,8 +16,6 @@ import pandas as pd
 from streamlit_pandas_profiling import st_profile_report
 import pandas_profiling
 import util as utl
-import base64
-import requests
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
