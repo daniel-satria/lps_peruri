@@ -27,7 +27,6 @@ font="sans serif" */
     width: 120px;
 }
 
-
 /* Content */
 .appview-container > section:nth-child(2) {
     background-color: #181A1B;
@@ -46,7 +45,7 @@ font="sans serif" */
     margin-top: 0;
 }
 .menu-secondary {
-    color: #5CC5CD;
+    color: #CCCCCC;
     text-decoration: underline;
 }
 .info-box {
@@ -105,7 +104,7 @@ button.step-up:focus:enabled, button.step-down:focus:enabled {
     background-color: #1f2223;
     border: 1px solid #CCCCCC;
     border-radius: 100%;
-    margin-right: 5px;
+    margin-right: 6px;
 }
 [data-baseweb="radio"] > [tabindex="0"] + div::before  {
     content: "";
@@ -115,7 +114,7 @@ button.step-up:focus:enabled, button.step-down:focus:enabled {
     background-color: #5CC5CD;
     border: 1px solid #5CC5CD;
     border-radius: 100%;
-    margin-right: 5px;
+    margin-right: 6px;
 }
 [data-baseweb="radio"] > [tabindex="0"] + div::after {
     content: "";
@@ -128,7 +127,39 @@ button.step-up:focus:enabled, button.step-down:focus:enabled {
     position: absolute;
     left: 13px;
 }
-
+/* Checkbox */
+[data-baseweb="checkbox"] > span:nth-child(1)  {
+    display: none;
+}
+[data-baseweb="checkbox"] > [aria-checked="true"] + div,
+[data-baseweb="checkbox"] > [aria-checked="false"] + div {
+    display: flex;
+    align-items: center;
+}
+[data-baseweb="checkbox"] > [aria-checked="false"] + div::before  {
+    content: "";
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
+    background-color: #1f2223;
+    border: 1px solid #CCCCCC;
+    border-radius: 20%;
+    margin-right: 6px;
+}
+[data-baseweb="checkbox"] > [aria-checked="true"] + div::before  {
+    content: "";
+    background-image: url("data:image/svg+xml,%0A%20%20%20%20%3Csvg%20width%3D%2217%22%20height%3D%2213%22%20viewBox%3D%220%200%2017%2013%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M6.50002%2012.6L0.400024%206.60002L2.60002%204.40002L6.50002%208.40002L13.9%200.900024L16.1%203.10002L6.50002%2012.6Z%22%20fill%3D%22%23f0f2f6%22%2F%3E%0A%20%20%20%20%3C%2Fsvg%3E%0A%20%20");
+    background-position: center;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
+    background-color: #5CC5CD;
+    border: 1px solid #5CC5CD;
+    border-radius: 20%;
+    margin-right: 6px;
+    padding: 8px;
+}
 /* Upload */
 section[data-testid="stFileUploadDropzone"] {
     background-color: #272e2f;
@@ -144,4 +175,16 @@ section[data-testid="stFileUploadDropzone"] {
 /* Tooltip */
 [role="tooltip"] > div {
     background-color: #272e2f;
+}
+/* Tag */
+[data-baseweb="tag"] {
+    background-color: #5CC5CD;
+}
+/* Accordion */
+.streamlit-expanderHeader:hover {
+    color: #5CC5CD;
+}
+/* Spinner */
+.stSpinner i {
+    border-color: #5CC5CD rgba(250, 250, 250, 0.2) rgba(250, 250, 250, 0.2);
 }

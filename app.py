@@ -133,7 +133,7 @@ if menu_selected == "Data Editing":
         if "data" not in st.session_state:
             st.session_state.data = dataframe
 
-        st.markdown("<h2 style='text-align: center; color: red;'>Original Data</h1>",
+        st.markdown("<h3 class='menu-secondary'>Original Data</h3>",
                     unsafe_allow_html=True)
         st.write(dataframe)
 
