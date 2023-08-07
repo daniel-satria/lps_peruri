@@ -51,7 +51,7 @@ st.sidebar.image("assets/paques-navbar-logo.png",
 with st.sidebar:
     menu_selected = option_menu("Menu", ["Home", "Data Exploration", "Data Editing", "Data Engineering", "Modelling"],
                                 icons=["house", "card-list", "award",
-                                       "database-fill-gear", "gear"],
+                                       "columns-gap", "gear"],
                                 menu_icon="cast",
                                 default_index=0,
                                 styles={
