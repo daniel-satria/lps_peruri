@@ -35,6 +35,8 @@ from sklearn.metrics.cluster import calinski_harabasz_score, davies_bouldin_scor
 
 from sklearn.model_selection import train_test_split
 
+import pickle
+
 import warnings
 warnings.simplefilter(action='ignore')
 
@@ -1345,9 +1347,15 @@ if menu_selected == "Modelling":
 
                 # Added clusters into data and showing them accoridngly
                 data_full_clustered['Cluster'] = clusters
-                st.markdown("<h4 class='menu-secondary'>Original Data with Clusters</h3>",
-                            unsafe_allow_html=True)  # edit dhanis
-                st.write(data_full_clustered)
+
+                with st.expander("Show Data"):
+
+                    st.markdown("<h4 class='menu-secondary'>Original Data with Clusters</h3>",
+                                unsafe_allow_html=True)  # edit dhanis
+                    st.write(data_full_clustered)
+
+                # Adding one space
+                st.markdown("<br>", unsafe_allow_html=True)
 
                 with st.expander("Show Evaluation Score"):
 
