@@ -16,6 +16,7 @@ import pandas as pd
 from streamlit_pandas_profiling import st_profile_report
 import pandas_profiling
 import util as utl
+import base64
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import LinearRegression
@@ -47,6 +48,28 @@ st.set_page_config(page_title="Simple AI",
 # Loading CSS
 utl.local_css("assets/custom.css")
 
+@st.cache_data()
+def get_base64_of_bin_file(bin_file): 
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+def set_png_as_page_bg(png_file):
+    bin_str = get_base64_of_bin_file(png_file)
+    page_bg_img = '''
+    <style>
+    .appview-container > section[tabindex="0"] {
+        background: bottom center/contain no-repeat url("data:image/png;base64,%s");
+    }
+    </style>
+    ''' % bin_str
+    
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+    return
+
+set_png_as_page_bg('assets/bg.png')
+
+
 # Logo in side bar configuration
 st.sidebar.image("assets/paques-navbar-logo.png",
                  output_format='PNG')
@@ -59,10 +82,10 @@ with st.sidebar:
                                 menu_icon="cast",
                                 default_index=0,
                                 styles={
-                                    "container": {"padding": "0!important", "background-color": "#272e2f"},
+                                    "container": {"padding": "0!important", "background-color": "#2E3D63"},
                                     # "icon": {"color": "orange", "font-size": "25px"}, 
                                     "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444"},
-                                    "nav-link-selected": {"color": "#5CC5CD", "background-color": "rgba(128, 128, 128, 0.1)"}
+                                    "nav-link-selected": {"color": "#FF7F00", "background-color": "rgba(128, 128, 128, 0.1)"}
                                 })
 
 # Configuring home menu
@@ -95,7 +118,7 @@ if menu_selected == "Data Exploration":
             st.session_state["uploaded_file"] = dataframe
 
         except:
-            st.markdown("<span class='info-box'>Please upload any data</span>",
+            st.markdown("<span class='info-box'>Please upload any data to edit</span>",
                     unsafe_allow_html=True)
 
     # Showing the uploaded file from session state
@@ -156,7 +179,7 @@ if menu_selected == "Data Editing":
             st.session_state.uploaded_file = dataframe
 
     if "uploaded_file" not in st.session_state:
-        st.markdown("<span class='info-box'>Please upload any data</span>",
+        st.markdown("<span class='info-box'>Please upload any data to edit</span>",
                 unsafe_allow_html=True)
 
     else:
@@ -246,10 +269,10 @@ if menu_selected == "Data Engineering":
                                 orientation="horizontal",
                                 default_index=0,
                                 styles={
-                                    "container": {"background-color": "#272e2f"},
+                                    "container": {"background-color": "#2E3D63"},
                                     # "icon": {"color": "orange", "font-size": "25px"}, 
                                     "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444", "text-align-last": "center"},
-                                    "nav-link-selected": {"color": "#5CC5CD", "background-color": "rgba(128, 128, 128, 0.1)"}
+                                    "nav-link-selected": {"color": "#FF7F00", "background-color": "rgba(128, 128, 128, 0.1)"}
                                 })
 
     # Setting engineering for Classification/Regression
@@ -271,7 +294,8 @@ if menu_selected == "Data Engineering":
                 st.session_state['data'] = dataframe
 
         else:
-            st.write("Please upload any data to edit.")
+            st.markdown("<span class='info-box'>Please upload any data to edit</span>",
+                    unsafe_allow_html=True)
 
         # Menu if data already stored in session state for classification/regression
         if 'data' in st.session_state:
@@ -281,6 +305,10 @@ if menu_selected == "Data Engineering":
             # Making column for selecting feature and target
             col1, col2 = st.columns(2)
 
+            # Giving two spaces
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown("<br>", unsafe_allow_html=True)
+            
             # Assigning option for feature column
             with col1:
                 feature_column = st.multiselect("Select any column to be featured for Classification/Regression",
@@ -293,10 +321,6 @@ if menu_selected == "Data Engineering":
             with col2:
                 target_column = st.selectbox("Select column to be the target",
                                              st.session_state.data.columns)
-
-            # Giving two spaces
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown("<br>", unsafe_allow_html=True)
 
             # Making column for showing features and target
             col3, col4 = st.columns([3, 1])
@@ -342,7 +366,6 @@ if menu_selected == "Data Engineering":
 
                 # Showing scaled data
                 st.markdown("<br>", unsafe_allow_html=True)
-                st.markdown("<br>", unsafe_allow_html=True)
 
                 # Showing Scaled Data Train
                 st.write("Data Train Scaled")
@@ -351,7 +374,6 @@ if menu_selected == "Data Engineering":
                          scaled_data_train.shape)
 
                 # Adding two spaces
-                st.markdown("<br>", unsafe_allow_html=True)
                 st.markdown("<br>", unsafe_allow_html=True)
 
                 # Showin Scaled Data test
@@ -389,7 +411,8 @@ if menu_selected == "Data Engineering":
                 st.session_state['data'] = dataframe
 
         else:
-            st.write("Please upload any data to edit.")
+            st.markdown("<span class='info-box'>Please upload any data to edit</span>",
+                    unsafe_allow_html=True)
 
         # Menu if data already stored in session state for clustering
         if 'data' in st.session_state:
@@ -407,7 +430,6 @@ if menu_selected == "Data Engineering":
                                             placeholder="Select columns")
 
             # Giving two spaces
-            st.markdown("<br>", unsafe_allow_html=True)
             st.markdown("<br>", unsafe_allow_html=True)
 
             st.write("Feature Data for Clustering")
@@ -450,17 +472,14 @@ if menu_selected == "Modelling":
                                 orientation="horizontal",
                                 default_index=0,
                                 styles={
-                                    "container": {"background-color": "#272e2f"},
+                                    "container": {"background-color": "#2E3D63"},
                                     # "icon": {"color": "orange", "font-size": "25px"}, 
                                     "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444", "text-align-last": "center"},
-                                    "nav-link-selected": {"color": "#5CC5CD", "background-color": "rgba(128, 128, 128, 0.1)"}
+                                    "nav-link-selected": {"color": "#FF7F00", "background-color": "rgba(128, 128, 128, 0.1)"}
                                 })
 
     # Configuring Classification Task
     if task_selected == "Classification":
-
-        # Adding one space
-        st.markdown("<br>", unsafe_allow_html=True)
 
         if "scaled_data_train" in st.session_state:
             st.write(st.session_state.scaled_data_train)
@@ -818,9 +837,6 @@ if menu_selected == "Modelling":
     # Configuring Regression Task
     if task_selected == "Regression":
 
-        # Adding one space
-        st.markdown("<br>", unsafe_allow_html=True)
-
         if "scaled_data_train" in st.session_state:
             st.write(st.session_state.scaled_data_train)
         else:
@@ -847,15 +863,13 @@ if menu_selected == "Modelling":
                         st.session_state["y"] = y
 
                 except:
-                    st.write("Please upload any data")
+                    st.markdown("<span class='info-box'>Please upload any data to edit</span>",
+                            unsafe_allow_html=True)
 
         # Markdown to give space
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        st.markdown("<h3 style='text-align: center; color: cyan;'>Model Configuration</h3>",
+        st.markdown("<h3 class='menu-secondary'>Model Configuration</h3>",
                     unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
 
         # Showing option of the Model
         model_selection = st.selectbox(
@@ -1133,9 +1147,6 @@ if menu_selected == "Modelling":
     # Configuring Clustering Task
     if task_selected == "Clustering":
 
-        # Adding one space
-        st.markdown("<br>", unsafe_allow_html=True)
-
         if "scaled_data_train" in st.session_state:
             st.write(st.session_state.scaled_data_train)
         else:
@@ -1162,17 +1173,13 @@ if menu_selected == "Modelling":
                         st.session_state["y"] = y
 
                 except:
-                    st.write("Please upload any data")
+                    st.markdown("<span class='info-box'>Please upload any data to edit</span>",
+                            unsafe_allow_html=True)
 
         # Giving two spaces
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        st.markdown("<h3 style='text-align: center; color: cyan;'>Model Configuration</h3>",
+        st.markdown("<h3 class='menu-secondary'>Model Configuration</h3>",
                     unsafe_allow_html=True)
-
-        # Giving one spaces
-        st.markdown("<br>", unsafe_allow_html=True)
 
         # Option for Clustering Model
         model_selection = st.selectbox(
