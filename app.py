@@ -50,11 +50,13 @@ st.set_page_config(page_title="True AI",
 # Loading CSS
 utl.local_css("assets/custom.css")
 
+
 @st.cache_data()
-def get_base64_of_bin_file(bin_file): 
+def get_base64_of_bin_file(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
     return base64.b64encode(data).decode()
+
 
 def set_png_as_page_bg(png_file):
     bin_str = get_base64_of_bin_file(png_file)
@@ -66,9 +68,10 @@ def set_png_as_page_bg(png_file):
     }
     </style>
     ''' % bin_str
-    
+
     st.markdown(page_bg_img, unsafe_allow_html=True)
     return
+
 
 set_png_as_page_bg('assets/bg.png')
 
@@ -86,10 +89,10 @@ with st.sidebar:
                                 default_index=0,
                                 styles={
                                     "container": {"padding": "0!important", "background-color": "#2E3D63"},
-                                    # "icon": {"color": "orange", "font-size": "25px"}, 
-                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444"},
+                                    # "icon": {"color": "orange", "font-size": "25px"},
+                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin": "0px", "--hover-color": "#444444"},
                                     "nav-link-selected": {"color": "#FF7F00", "background-color": "rgba(128, 128, 128, 0.1)"}
-                                })
+    })
 
 # Configuring home menu
 if menu_selected == "Home":
@@ -123,8 +126,8 @@ if menu_selected == "Data Exploration":
             st.session_state["uploaded_file"] = dataframe
 
         except:
-            st.markdown("<span class='info-box'>Please upload any data to edit</span>",
-                    unsafe_allow_html=True)
+            st.markdown("<span class='info-box'>Please upload any data</span>",
+                        unsafe_allow_html=True)
 
     # Showing the uploaded file from session state
     try:
@@ -189,8 +192,8 @@ if menu_selected == "Data Editing":
             st.session_state.uploaded_file = dataframe
 
     if "uploaded_file" not in st.session_state:
-        st.markdown("<span class='info-box'>Please upload any data to edit</span>",
-                unsafe_allow_html=True)
+        st.markdown("<span class='info-box'>Please upload any data</span>",
+                    unsafe_allow_html=True)
 
     else:
 
@@ -295,10 +298,10 @@ if menu_selected == "Feature Engineering":
                                 default_index=0,
                                 styles={
                                     "container": {"background-color": "#2E3D63"},
-                                    # "icon": {"color": "orange", "font-size": "25px"}, 
-                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444", "text-align-last": "center"},
+                                    # "icon": {"color": "orange", "font-size": "25px"},
+                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin": "0px", "--hover-color": "#444444", "text-align-last": "center"},
                                     "nav-link-selected": {"color": "#FF7F00", "background-color": "rgba(128, 128, 128, 0.1)"}
-                                })
+    })
 
     # Setting engineering for Classification/Regression
     if task_selected == "Feature Engineering for Classification/Regression":
@@ -322,8 +325,8 @@ if menu_selected == "Feature Engineering":
                 st.session_state['data'] = dataframe
 
         else:
-            st.markdown("<span class='info-box'>Please upload any data to edit</span>",
-                    unsafe_allow_html=True)
+            st.markdown("<span class='info-box'>Please upload any data</span>",
+                        unsafe_allow_html=True)
 
         # Menu if data already stored in session state for classification/regression
         if 'data' in st.session_state:
@@ -335,7 +338,7 @@ if menu_selected == "Feature Engineering":
 
             # Giving two spaces
             st.markdown("<br>", unsafe_allow_html=True)
-            
+
             # Assigning option for feature column
             with col1:
                 st.markdown("<br>", unsafe_allow_html=True)
@@ -446,8 +449,8 @@ if menu_selected == "Feature Engineering":
                 st.session_state['data'] = dataframe
 
         else:
-            st.markdown("<span class='info-box'>Please upload any data to edit</span>",
-                    unsafe_allow_html=True)
+            st.markdown("<span class='info-box'>Please upload any data</span>",
+                        unsafe_allow_html=True)
 
         # Menu if data already stored in session state for clustering
         if 'data' in st.session_state:
@@ -513,10 +516,10 @@ if menu_selected == "Modelling":
                                 default_index=0,
                                 styles={
                                     "container": {"background-color": "#2E3D63"},
-                                    # "icon": {"color": "orange", "font-size": "25px"}, 
-                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#444444", "text-align-last": "center"},
+                                    # "icon": {"color": "orange", "font-size": "25px"},
+                                    "nav-link": {"font-size": "15px", "text-align": "left", "margin": "0px", "--hover-color": "#444444", "text-align-last": "center"},
                                     "nav-link-selected": {"color": "#FF7F00", "background-color": "rgba(128, 128, 128, 0.1)"}
-                                })
+    })
 
     # Configuring Classification Task
     if task_selected == "Classification":
@@ -553,7 +556,7 @@ if menu_selected == "Modelling":
         # Adding one space
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<h3 class='menu-secondary'>Model Configuration</h3>",
-                    unsafe_allow_html=True) # edit dhanis
+                    unsafe_allow_html=True)  # edit dhanis
 
         # Selecting Model for Classification
         model_selection = st.selectbox(
@@ -925,8 +928,8 @@ if menu_selected == "Modelling":
                         st.session_state["y"] = y
 
                 except:
-                    st.markdown("<span class='info-box'>Please upload any data to edit</span>",
-                            unsafe_allow_html=True)
+                    st.markdown("<span class='info-box'>Please upload any data</span>",
+                                unsafe_allow_html=True)
 
         # Markdown to give space
         st.markdown("<br>", unsafe_allow_html=True)
@@ -1243,8 +1246,8 @@ if menu_selected == "Modelling":
                         st.session_state["y"] = y
 
                 except:
-                    st.markdown("<span class='info-box'>Please upload any data to edit</span>",
-                            unsafe_allow_html=True)
+                    st.markdown("<span class='info-box'>Please upload any data</span>",
+                                unsafe_allow_html=True)
 
         # Giving two spaces
         st.markdown("<br>", unsafe_allow_html=True)
