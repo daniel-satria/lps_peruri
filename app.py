@@ -53,8 +53,8 @@ st.sidebar.image("assets/paques-navbar-logo.png",
 
 # Sidebar Menu
 with st.sidebar:
-    menu_selected = option_menu("", ["Home", "Data Exploration", "Data Editing", "Data Engineering", "Modelling"],
-                                icons=["house", "card-list", "award",
+    menu_selected = option_menu("", ["Home", "Data Exploration", "Data Editing", "Feature Engineering", "Modelling"],
+                                icons=["house", "card-list", "pencil-square",
                                        "columns-gap", "gear"],
                                 menu_icon="cast",
                                 default_index=0,
@@ -210,10 +210,10 @@ if menu_selected == "Data Editing":
             st.write("")
 
 
-# Configuring Data Engineering Menu
-if menu_selected == "Data Engineering":
+# Configuring Feature Engineering Menu
+if menu_selected == "Feature Engineering":
 
-    st.markdown("<h2 class='menu-title'>Data Engineering</h2>",
+    st.markdown("<h2 class='menu-title'>Feature Engineering</h2>",
                 unsafe_allow_html=True)
     st.markdown("<h6 class='menu-subtitle'>Transforming raw data into a structured and usable format for training machine learning</h6>",
                 unsafe_allow_html=True)
@@ -244,10 +244,10 @@ if menu_selected == "Data Engineering":
     if 'y_test' not in st.session_state:
         st.session_state['y_test'] = ""
 
-    # Making task option menu
-    task_selected = option_menu("", ["Engineering for Classification/Regression",
-                                     "Engineering for Clustering"],
-                                icons=["house", "card-list"],
+    # Making task option menu for feature engineering
+    task_selected = option_menu("", ["Feature Engineering for Classification/Regression",
+                                     "Feature Engineering for Clustering"],
+                                icons=["motherboard", "people"],
                                 menu_icon="cast",
                                 orientation="horizontal",
                                 default_index=0,
@@ -259,7 +259,7 @@ if menu_selected == "Data Engineering":
     })
 
     # Setting engineering for Classification/Regression
-    if task_selected == "Engineering for Classification/Regression":
+    if task_selected == "Feature Engineering for Classification/Regression":
 
         # Adding one space
         st.markdown("<br>", unsafe_allow_html=True)
@@ -382,7 +382,8 @@ if menu_selected == "Data Engineering":
         else:
             st.write("")
 
-    if task_selected == "Engineering for Clustering":
+    # Option engineering for clustering
+    if task_selected == "Feature Engineering for Clustering":
 
         # Adding one space
         st.markdown("<br>", unsafe_allow_html=True)
