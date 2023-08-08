@@ -1,8 +1,8 @@
 [theme]
-primaryColor="#FF4B4B"
-backgroundColor="#0E1117"
-secondaryBackgroundColor="#262730"
-textColor="#FAFAFA"
+primaryColor="#FF7F00"
+backgroundColor="#182136"
+secondaryBackgroundColor="#2E3D63"
+textColor="#EEEEEE"
 font="sans serif"
 
 [deprecation]
