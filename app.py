@@ -107,13 +107,14 @@ if menu_selected == "Data Exploration":
 
         # Initiating pandas profiling
         if st.button('Plot the Data Exploration'):
-            pr = dataframe.profile_report()
+            pr = st.session_state.uploaded_file.profile_report()
             st_profile_report(pr)
 
         else:
             st.write("")
     except:
-        st.write("")
+        st.markdown("<span class='info-box'>Please upload any data</span>",
+                    unsafe_allow_html=True)
 
     st.write("")
 
@@ -140,6 +141,7 @@ if menu_selected == "Data Editing":
         st.markdown("<h3 class='menu-secondary'>Original Data</h3>",
                     unsafe_allow_html=True)
         st.write(dataframe)
+        st.write(":green[Data Shape :]", dataframe.shape)
 
     else:
 
@@ -156,6 +158,7 @@ if menu_selected == "Data Editing":
             dataframe = get_data(uploaded_file)
 
             st.write(dataframe)
+            st.write(dataframe.shape)
 
             st.session_state.uploaded_file = dataframe
 
@@ -196,15 +199,28 @@ if menu_selected == "Data Editing":
             modified_df = modified_df[["x"] +
                                       modified_df.columns[:-1].tolist()]
 
+            # Adding one space
+            st.markdown("<br>", unsafe_allow_html=True)
+
             st.write("Please click the data on x to delete the record.")
+
             # Initating Data Editor
-            st.data_editor(
+            edited_data = st.data_editor(
                 modified_df,
                 key="data_editor",
                 on_change=callback,
                 hide_index=False,
                 column_config=column_config,
             )
+            st.write(":green[Edited Data Shape, :]",
+                     edited_data.drop(columns=['x'], axis=1).shape)
+
+            if "edited_data" not in st.session_state:
+                st.session_state["edited_data"] = edited_data.drop(columns=[
+                                                                   'x'], axis=1)
+            else:
+                st.session_state["edited_data"] = edited_data.drop(columns=[
+                                                                   'x'], axis=1)
 
         else:
             st.write("")
@@ -227,10 +243,10 @@ if menu_selected == "Feature Engineering":
         st.session_state['target_data'] = ""
 
     if 'feature_data_train' not in st.session_state:
-        st.session_state['feature_data'] = ""
+        st.session_state['feature_data_train'] = ""
 
     if 'feature_data_test' not in st.session_state:
-        st.session_state['feature_data'] = ""
+        st.session_state['feature_data_test'] = ""
 
     if 'scaled_data_train' not in st.session_state:
         st.session_state['scaled_data_train'] = ""
@@ -280,7 +296,11 @@ if menu_selected == "Feature Engineering":
                 st.session_state['data'] = dataframe
 
         else:
-            st.write("Please upload any data to edit.")
+            st.markdown("<span class='info-box'>Please upload any data</span>",
+                        unsafe_allow_html=True)
+
+        # Adding one space
+        st.markdown("<br>", unsafe_allow_html=True)
 
         # Menu if data already stored in session state for classification/regression
         if 'data' in st.session_state:
@@ -404,7 +424,8 @@ if menu_selected == "Feature Engineering":
                 st.session_state['data'] = dataframe
 
         else:
-            st.write("Please upload any data to edit.")
+            st.markdown("<span class='info-box'>Please upload any data</span>",
+                        unsafe_allow_html=True)
 
         # Menu if data already stored in session state for clustering
         if 'data' in st.session_state:
