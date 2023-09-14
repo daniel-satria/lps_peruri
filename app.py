@@ -827,13 +827,11 @@ if menu_selected == "Modelling":
         # Adding one space
         st.markdown("<br>", unsafe_allow_html=True)
 
+            
         # Setting Logistic Regression Model
         if model_selection == "Logistic Regression":
-
+            
             col1, col2, col3 = st.columns(3)
-
-            # Adding one space
-            st.markdown("<br>", unsafe_allow_html=True)
 
             with col1:
                 # Setting Logistic Regression Penalty
@@ -1482,24 +1480,29 @@ if menu_selected == "Modelling":
         )
         st.write("Model selected:", model_selection)
 
+        # Adding one space
+        st.markdown("<br>", unsafe_allow_html=True)
+
         # Option if Linear Regression selected
         if model_selection == 'Linear Regression':
-            # Adding one space
-            st.markdown("<br>", unsafe_allow_html=True)
 
-            # Setting Linear Regression fitting intercept
-            lin_reg_fit_intercept = st.radio(
-                "Calculating the intercept for the model",
-                (True, False)
-            )
-            # Adding one space
-            st.markdown("<br>", unsafe_allow_html=True)
+            col1, col2 = st.columns(2)
 
-            # Setting Linear Regression positive coefficients
-            lin_reg_positive = st.radio(
-                "Forcing the coefficients to be positive",
-                (False, True)
-            )
+            with col1:
+                # Setting Linear Regression fitting intercept
+                lin_reg_fit_intercept = st.radio(
+                    "Calculating the intercept for the model",
+                    (True, False),
+                    horizontal=True
+                )
+
+            with col2:
+                # Setting Linear Regression positive coefficients
+                lin_reg_positive = st.radio(
+                    "Forcing the coefficients to be positive",
+                    (False, True),
+                    horizontal=True
+                )
 
             # Linear Regression Object
             lin_reg_obj = LinearRegression(
@@ -2035,14 +2038,15 @@ if menu_selected == "Modelling":
             st.markdown("<br>", unsafe_allow_html=True)
 
             # Adding column section for K-Means Hyper-parameters
-            col1, col2, col3, col4 = st.columns(4)
-            col5, col6, col7, col8 = st.columns(4)
+            col1, col2, col3 = st.columns(3)
+            col4, col5, col6 = st.columns(3)
 
             # Making variable of K-Means' hyper-parameter input
             with col1:
                 algorithm = st.radio(
                     "K-Means Algorithm",
-                    ("lloyd", "elkan")
+                    ("lloyd", "elkan"),
+                    horizontal=True
                 )
 
             with col2:
@@ -2064,13 +2068,14 @@ if menu_selected == "Modelling":
             # Adding one space
             st.markdown("<br>", unsafe_allow_html=True)
 
-            with col5:
+            with col4:
                 init = st.radio(
                     "Method of initialization",
-                    ("k-means++", "random")
+                    ("k-means++", "random"),
+                    horizontal=True
                 )
 
-            with col6:
+            with col5:
                 n_init = st.number_input(
                     "Number of Run Different Centroid Seeds",
                     min_value=2,
@@ -2078,7 +2083,7 @@ if menu_selected == "Modelling":
                     step=1
                 )
 
-            with col7:
+            with col6:
                 random_state = st.number_input(
                     "Random state",
                     min_value=1,
